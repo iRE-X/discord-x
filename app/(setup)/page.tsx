@@ -1,3 +1,4 @@
+import CreateServer from "@/components/models/CreateServer";
 import { initialProfile } from "@/lib/initial-profile";
 import prisma from "@/prisma/db";
 import { redirect } from "next/navigation";
@@ -17,7 +18,7 @@ const SetUpPage = async () => {
 
     if (server) return redirect(`/servers/${server.id}`);
 
-    return <div>Create a Server</div>;
+    return <CreateServer />;
 };
 
 export default SetUpPage;
