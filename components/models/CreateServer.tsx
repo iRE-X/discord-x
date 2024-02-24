@@ -23,6 +23,8 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import UploadFile from "../UploadFile";
 
@@ -35,6 +37,7 @@ type FormData = z.infer<typeof schema>;
 
 const CreateServer = () => {
     const [isMounted, setMounted] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         setMounted(true);
@@ -46,8 +49,16 @@ const CreateServer = () => {
     });
     const isLoading = form.formState.isSubmitting;
 
-    const doSubmit = (data: FormData) => {
-        console.log(data);
+    const doSubmit = async (data: FormData) => {
+        try {
+            await axios.post("/api/servers", data);
+
+            form.reset();
+            router.refresh();
+            window.location.reload();
+        } catch (error) {
+            console.log("CREATE SERVER ERROR : ", error);
+        }
     };
 
     if (!isMounted) return null;
