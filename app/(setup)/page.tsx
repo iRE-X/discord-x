@@ -1,4 +1,4 @@
-import CreateServer from "@/components/models/CreateServer";
+import InitialModal from "@/components/modals/initial-modal";
 import { initialProfile } from "@/lib/initial-profile";
 import prisma from "@/prisma/db";
 import { redirect } from "next/navigation";
@@ -18,7 +18,7 @@ const SetUpPage = async () => {
 
     if (server) return redirect(`/servers/${server.id}`);
 
-    return <CreateServer />;
+    return <InitialModal />;
 };
 
 export default SetUpPage;

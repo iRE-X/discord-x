@@ -40,7 +40,7 @@ const NavigationItem = ({ id, name, imageUrl }: Props) => {
                             "bg-primary/20 text-primary rounded-[16px]"
                     )}
                 >
-                    <Image fill src={imageUrl} alt="Server" />
+                    <Image fill src={imageUrl} alt="Server" sizes="100%" />
                 </div>
             </button>
         </ActionToolTip>

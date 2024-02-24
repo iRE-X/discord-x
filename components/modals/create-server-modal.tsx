@@ -23,9 +23,9 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useModal from "@/hooks/useModal";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import UploadFile from "../UploadFile";
 
 const schema = z.object({
@@ -35,13 +35,11 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const CreateServer = () => {
-    const [isMounted, setMounted] = useState(false);
+const CreateServerModal = () => {
+    const { isOpen, type, onClose } = useModal();
     const router = useRouter();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    const openDialog = isOpen && type === "createServer";
 
     const form = useForm({
         resolver: zodResolver(schema),
@@ -55,16 +53,19 @@ const CreateServer = () => {
 
             form.reset();
             router.refresh();
-            window.location.reload();
+            onClose();
         } catch (error) {
             console.log("CREATE SERVER ERROR : ", error);
         }
     };
 
-    if (!isMounted) return null;
+    const handleClose = () => {
+        form.reset();
+        onClose();
+    };
 
     return (
-        <Dialog open>
+        <Dialog open={openDialog} onOpenChange={handleClose}>
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl font-bold text-center">
@@ -136,4 +137,4 @@ const CreateServer = () => {
     );
 };
 
-export default CreateServer;
+export default CreateServerModal;
