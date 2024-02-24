@@ -1,4 +1,4 @@
-import NavigationSidebar from "@/components/navigation/NavigationSidebar";
+import NavigationSidebar from "@/components/navigation/Navigation-Sidebar";
 import React from "react";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
