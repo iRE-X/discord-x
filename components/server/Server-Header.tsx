@@ -1,3 +1,5 @@
+"use client";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -5,6 +7,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import useModal from "@/hooks/useModal";
 import { Member, MemberRole, Profile, Server } from "@prisma/client";
 import {
     ChevronDown,
@@ -15,6 +18,7 @@ import {
     UserPlus2,
     Users2,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 type ServerWithMembersWithProfile = Server & {
     members: (Member & { profile: Profile })[];
@@ -26,6 +30,15 @@ interface Props {
 }
 
 const ServerHeader = ({ server, role }: Props) => {
+    const { onOpen } = useModal();
+    const [isMounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!isMounted) return null;
+
     const isAdmin = role === MemberRole.ADMIN;
     const isModerator = isAdmin || role === MemberRole.MODERATOR;
 
@@ -39,7 +52,10 @@ const ServerHeader = ({ server, role }: Props) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 text-sm font-medium text-black dark:text-neutral-400 space-y-[2px]">
                 {isModerator && (
-                    <DropdownMenuItem className="text-indigo-600 dark:text-indigo-400 px-3 py-2 cursor-pointer">
+                    <DropdownMenuItem
+                        onClick={() => onOpen("invite", { server })}
+                        className="text-indigo-600 dark:text-indigo-400 px-3 py-2 cursor-pointer"
+                    >
                         Invite People
                         <UserPlus2 className="h-4 w-4 ml-auto" />
                     </DropdownMenuItem>
@@ -59,7 +75,7 @@ const ServerHeader = ({ server, role }: Props) => {
                     </DropdownMenuItem>
                 )}
 
-                {isAdmin && (
+                {isModerator && (
                     <DropdownMenuItem className="px-3 py-2 cursor-pointer">
                         Server Settings
                         <Settings className="h-4 w-4 ml-auto" />
