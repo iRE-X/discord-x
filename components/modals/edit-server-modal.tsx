@@ -23,10 +23,11 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useModal from "@/hooks/useModal";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import UploadFile from "../UploadFile";
+import { useEffect } from "react";
 
 const schema = z.object({
     name: z.string().min(1, { message: "Server name is required!" }),
@@ -35,40 +36,55 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const InitialModal = () => {
-    const [isMounted, setMounted] = useState(false);
+const EditServerModal = () => {
+    const {
+        isOpen,
+        type,
+        onClose,
+        data: { server },
+    } = useModal();
+
     const router = useRouter();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    const openDialog = isOpen && type === "editServer";
 
     const form = useForm({
         resolver: zodResolver(schema),
         defaultValues: { name: "", imageUrl: "" },
     });
+
     const isLoading = form.formState.isSubmitting;
 
     const doSubmit = async (data: FormData) => {
         try {
-            await axios.post("/api/servers", data);
+            await axios.patch(`/api/servers/${server?.id}`, data);
 
             form.reset();
             router.refresh();
-            window.location.reload();
+            onClose();
         } catch (error) {
-            console.log("CREATE SERVER ERROR : ", error);
+            console.log("EDIT SERVER ERROR : ", error);
         }
     };
 
-    if (!isMounted) return null;
+    const handleClose = () => {
+        form.reset();
+        onClose();
+    };
+
+    useEffect(() => {
+        if (server) {
+            form.setValue("name", server.name);
+            form.setValue("imageUrl", server.imageUrl);
+        }
+    }, [server, form]);
 
     return (
-        <Dialog open>
+        <Dialog open={openDialog} onOpenChange={handleClose}>
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl font-bold text-center">
-                        Create Your Server
+                        Customize Your Server
                     </DialogTitle>
                     <DialogDescription className="text-center text-zinc-500">
                         Give your server a personality with a name and image,
@@ -127,7 +143,7 @@ const InitialModal = () => {
                                 disabled={isLoading}
                                 variant="primary"
                             >
-                                Create
+                                Save
                             </Button>
                         </DialogFooter>
                     </form>
@@ -137,4 +153,4 @@ const InitialModal = () => {
     );
 };
 
-export default InitialModal;
+export default EditServerModal;
