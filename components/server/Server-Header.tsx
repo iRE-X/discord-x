@@ -8,7 +8,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import useModal from "@/hooks/useModal";
-import { Member, MemberRole, Profile, Server } from "@prisma/client";
+import { ServerWithMembersWithProfile } from "@/types";
+import { MemberRole } from "@prisma/client";
 import {
     ChevronDown,
     LogOut,
@@ -19,10 +20,6 @@ import {
     Users2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-
-type ServerWithMembersWithProfile = Server & {
-    members: (Member & { profile: Profile })[];
-};
 
 interface Props {
     server: ServerWithMembersWithProfile;
@@ -69,7 +66,10 @@ const ServerHeader = ({ server, role }: Props) => {
                 )}
 
                 {isAdmin && (
-                    <DropdownMenuItem className="px-3 py-2 cursor-pointer">
+                    <DropdownMenuItem
+                        onClick={() => onOpen("manageMembers", { server })}
+                        className="px-3 py-2 cursor-pointer"
+                    >
                         Manage Members
                         <Users2 className="h-4 w-4 ml-auto" />
                     </DropdownMenuItem>
