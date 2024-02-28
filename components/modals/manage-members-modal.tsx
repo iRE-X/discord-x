@@ -12,8 +12,33 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import useModal from "@/hooks/useModal";
 import { ServerWithMembersWithProfile } from "@/types";
 import UserAvatar from "@/components/User-Avatar";
-import { ShieldAlert, ShieldCheck } from "lucide-react";
+import {
+    Check,
+    Gavel,
+    Loader2,
+    MoreVertical,
+    Option,
+    Shield,
+    ShieldAlert,
+    ShieldCheck,
+    UserX,
+} from "lucide-react";
 import { useState } from "react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuPortal,
+    DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { MemberRole } from "@prisma/client";
+import qs from "query-string";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const roleIconMap = {
     ADMIN: <ShieldAlert className="h-4 w-4 text-rose-500" />,
@@ -22,12 +47,54 @@ const roleIconMap = {
 };
 
 const ManageMembersModal = () => {
-    const { isOpen, type, onClose, data } = useModal();
+    const router = useRouter();
+    const { onOpen, isOpen, type, onClose, data } = useModal();
     const [loadingId, setLoadingId] = useState("");
 
-    const { server } = data as { server: ServerWithMembersWithProfile };
-
     const openDialog = isOpen && type === "manageMembers";
+
+    let { server } = data as { server: ServerWithMembersWithProfile };
+
+    const onRoleChange = async (memberId: string, role: MemberRole) => {
+        try {
+            setLoadingId(memberId);
+            const url = qs.stringifyUrl({
+                url: `/api/members/${memberId}`,
+                query: {
+                    serverId: server.id,
+                },
+            });
+            // const url = `/api/members/${memberId}?serverId=${server.id}`;
+
+            const { data } = await axios.patch(url, { role });
+            router.refresh();
+            onOpen("manageMembers", { server: data });
+        } catch (error) {
+            console.log("MANAGE-MEMBERS-ROLE-CHANGE ERROR: ", error);
+        } finally {
+            setLoadingId("");
+        }
+    };
+
+    const onKick = async (memberId: string) => {
+        try {
+            setLoadingId(memberId);
+            const url = qs.stringifyUrl({
+                url: `/api/members/${memberId}`,
+                query: {
+                    serverId: server.id,
+                },
+            });
+
+            const { data } = await axios.delete(url);
+            router.refresh();
+            onOpen("manageMembers", { server: data });
+        } catch (error) {
+            console.log("MANAGE-MEMBERS-KICK ERROR: ", error);
+        } finally {
+            setLoadingId("");
+        }
+    };
 
     return (
         <Dialog open={openDialog} onOpenChange={onClose}>
@@ -52,14 +119,80 @@ const ManageMembersModal = () => {
                                     {member.profile.name}
                                     {roleIconMap[member.role]}
                                 </div>
-                                <p className="text-xs text-sinc-500">
+                                <p className="text-xs text-sinc-500/70">
                                     {member.profile.email}
                                 </p>
                             </div>
                             {server.profileId !== member.profileId &&
                                 loadingId !== member.profileId && (
-                                    <div className="ml-auto">Action</div>
+                                    <div className="ml-auto">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger>
+                                                {loadingId !== member.id && (
+                                                    <MoreVertical className="h-4 w-4" />
+                                                )}
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent side="left">
+                                                <DropdownMenuSub>
+                                                    <DropdownMenuSubTrigger>
+                                                        <DropdownMenuItem>
+                                                            <span>Role</span>
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuSubTrigger>
+                                                    <DropdownMenuSubContent>
+                                                        <DropdownMenuItem
+                                                            onClick={() =>
+                                                                onRoleChange(
+                                                                    member.id,
+                                                                    "GUEST"
+                                                                )
+                                                            }
+                                                            className="cursor-pointer"
+                                                        >
+                                                            <Shield className="h-4 w-4 mr-2" />
+                                                            <span>GUEST</span>
+                                                            {member.role ===
+                                                                "GUEST" && (
+                                                                <Check className="h-4 w-4 ml-auto" />
+                                                            )}
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            onClick={() =>
+                                                                onRoleChange(
+                                                                    member.id,
+                                                                    "MODERATOR"
+                                                                )
+                                                            }
+                                                            className="cursor-pointer"
+                                                        >
+                                                            <ShieldCheck className="h-4 w-4 mr-2 text-indigo-500" />
+                                                            <span>
+                                                                MODERATOR
+                                                            </span>
+                                                            {member.role ===
+                                                                "MODERATOR" && (
+                                                                <Check className="h-4 w-4 ml-auto" />
+                                                            )}
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuSubContent>
+                                                </DropdownMenuSub>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem
+                                                    onClick={() =>
+                                                        onKick(member.id)
+                                                    }
+                                                    className="cursor-pointer"
+                                                >
+                                                    <UserX className="h-4 w-4 mr-2" />
+                                                    <span>Kick</span>
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
                                 )}
+                            {loadingId === member.id && (
+                                <Loader2 className="h-4 w-4 ml-auto animate-spin" />
+                            )}
                         </div>
                     ))}
                 </ScrollArea>
