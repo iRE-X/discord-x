@@ -80,6 +80,7 @@ const ServerSearch = ({ data }: Props) => {
                                     <CommandItem
                                         onSelect={() => onClick(id, type)}
                                         key={id}
+                                        className="cursor-pointer"
                                     >
                                         {icon}
                                         <span>{name}</span>

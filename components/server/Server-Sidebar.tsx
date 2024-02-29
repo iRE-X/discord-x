@@ -1,11 +1,19 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import currentProfile from "@/lib/current-profile";
+
 import prisma from "@/prisma/db";
 import { ChannelType } from "@prisma/client";
+
 import { Hash, Mic, ShieldAlert, ShieldCheck, User, Video } from "lucide-react";
 import { redirect } from "next/navigation";
+
 import ServerHeader from "./Server-Header";
 import ServerSearch from "./Server-Search";
+import ServerSection from "./Server-Section";
+import ServerChannel from "./Server-Channel";
+import ServerMember from "./Server-Member";
+import { Server } from "https";
 
 const iconMap = {
     TEXT: <Hash className="h-4 w-4 mr-2" />,
@@ -113,6 +121,74 @@ const ServerSidebar = async ({ serverId }: { serverId: string }) => {
                         ]}
                     />
                 </div>
+                <Separator className="bg-zinc-100 dark:bg-zinc-700 my-2" />
+                {textChannels?.length && (
+                    <div className="mb-2">
+                        <ServerSection
+                            label="Text Channels"
+                            sectionType="channel"
+                            role={role}
+                            channelType="TEXT"
+                        />
+                        {textChannels.map(channel => (
+                            <ServerChannel
+                                key={channel.id}
+                                channel={channel}
+                                role={role}
+                                server={server}
+                            />
+                        ))}
+                    </div>
+                )}
+                {audioChannels?.length && (
+                    <div className="mb-2">
+                        <ServerSection
+                            label="Voice Channels"
+                            sectionType="channel"
+                            role={role}
+                            channelType="AUDIO"
+                        />
+                        {audioChannels.map(channel => (
+                            <ServerChannel
+                                key={channel.id}
+                                channel={channel}
+                                role={role}
+                                server={server}
+                            />
+                        ))}
+                    </div>
+                )}
+                {videoChannels?.length && (
+                    <div className="mb-2">
+                        <ServerSection
+                            label="Video Channels"
+                            sectionType="channel"
+                            role={role}
+                            channelType="VIDEO"
+                        />
+                        {videoChannels.map(channel => (
+                            <ServerChannel
+                                key={channel.id}
+                                channel={channel}
+                                role={role}
+                                server={server}
+                            />
+                        ))}
+                    </div>
+                )}
+                {members?.length && (
+                    <div className="mb-2">
+                        <ServerSection
+                            label="Members"
+                            sectionType="member"
+                            role={role}
+                            server={server}
+                        />
+                        {members.map(member => (
+                            <ServerMember member={member} server={server} />
+                        ))}
+                    </div>
+                )}
             </ScrollArea>
         </div>
     );

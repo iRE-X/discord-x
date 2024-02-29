@@ -12,10 +12,10 @@ interface Props {
     children: React.ReactNode;
     label: string;
     side: "left" | "right" | "top" | "bottom";
-    align: "start" | "center" | "end";
+    align?: "start" | "center" | "end";
 }
 
-const ActionToolTip = ({ children, label, side, align }: Props) => {
+const ActionToolTip = ({ children, label, side, align = "center" }: Props) => {
     return (
         <TooltipProvider>
             <Tooltip delayDuration={50}>
