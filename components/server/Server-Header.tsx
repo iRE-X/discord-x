@@ -7,7 +7,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/useModalStore";
 import { ServerWithMembersWithProfile } from "@/types";
 import { MemberRole } from "@prisma/client";
 import {

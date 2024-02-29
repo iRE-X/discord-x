@@ -23,7 +23,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/useModalStore";
 import { ChannelType } from "@prisma/client";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";

@@ -23,7 +23,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/useModalStore";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import UploadFile from "../UploadFile";

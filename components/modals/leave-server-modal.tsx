@@ -9,7 +9,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/useModalStore";
 import useOrigin from "@/hooks/useOrigin";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";

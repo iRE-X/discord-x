@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import useModal from "@/hooks/useModal";
+import useModal from "@/hooks/useModalStore";
 import { ServerWithMembersWithProfile } from "@/types";
 import UserAvatar from "@/components/User-Avatar";
 import {
