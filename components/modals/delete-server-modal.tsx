@@ -15,7 +15,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const LeaveServerModal = () => {
+const DeleteServerModal = () => {
     const {
         isOpen,
         type,
@@ -25,21 +25,21 @@ const LeaveServerModal = () => {
 
     const router = useRouter();
 
-    const openDialog = isOpen && type === "leaveServer";
+    const openDialog = isOpen && type === "deleteServer";
 
     const [isLoading, setLoading] = useState(false);
 
-    const onLeave = async () => {
+    const onDelete = async () => {
         try {
             setLoading(true);
 
-            await axios.patch(`/api/servers/${server?.id}/leave`);
+            await axios.delete(`/api/servers/${server?.id}`);
 
             onClose();
             router.push("/");
             router.refresh();
         } catch (error) {
-            console.log("LEAVE-SERVER-ERROR: ", error);
+            console.log("DELETE-SERVER-ERROR: ", error);
         } finally {
             setLoading(false);
         }
@@ -50,14 +50,19 @@ const LeaveServerModal = () => {
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl font-bold text-center">
-                        Are You Sure ?
+                        Delete Server ?
                     </DialogTitle>
                     <DialogDescription className="text-center text-sinc-500">
-                        Do you really want to leave{" "}
+                        Are you sure want to{" "}
+                        <span className="font-semibold text-rose-500">
+                            Delete
+                        </span>{" "}
+                        this server ?
+                        <br />
                         <span className="font-semibold text-indigo-500">
-                            {server?.name}
+                            {server?.name}&nbsp;
                         </span>
-                        ??
+                        will be permanently deleted
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="bg-gray-100 px-8 py-4">
@@ -67,14 +72,14 @@ const LeaveServerModal = () => {
                             disabled={isLoading}
                             variant="ghost"
                         >
-                            Stay
+                            Cancel
                         </Button>
                         <Button
-                            onClick={onLeave}
+                            onClick={onDelete}
                             disabled={isLoading}
                             variant="destructive"
                         >
-                            Leave
+                            Confirm
                         </Button>
                     </div>
                 </DialogFooter>
@@ -83,4 +88,4 @@ const LeaveServerModal = () => {
     );
 };
 
-export default LeaveServerModal;
+export default DeleteServerModal;
