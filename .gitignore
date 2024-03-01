@@ -8,6 +8,7 @@
 
 # testing
 /coverage
+/app/api/socket
 
 # next.js
 /.next/
