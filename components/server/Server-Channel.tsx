@@ -52,7 +52,11 @@ const ServerChannel = ({ channel, role, server }: Props) => {
             {channel.name !== "general" && role !== "GUEST" && (
                 <div className="flex items-center ml-auto gap-x-2">
                     <ActionToolTip label="Edit" side="top">
-                        <button>
+                        <button
+                            onClick={() =>
+                                onOpen("editChannel", { server, channel })
+                            }
+                        >
                             <Edit className="hidden group-hover:block h-4 w-4 text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" />
                         </button>
                     </ActionToolTip>
