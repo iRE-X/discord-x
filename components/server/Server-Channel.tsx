@@ -21,12 +21,13 @@ const iconMap = {
 
 const ServerChannel = ({ channel, role, server }: Props) => {
     const [isMounted, setMounted] = useState(false);
+    const { channelId } = useParams();
+
     useEffect(() => {
         setMounted(true);
     }, []);
     if (!isMounted) return null;
 
-    const { channelId } = useParams();
     const Icon = iconMap[channel.type];
 
     return (

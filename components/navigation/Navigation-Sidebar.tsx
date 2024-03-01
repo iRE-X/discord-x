@@ -23,7 +23,7 @@ const NavigationSidebar = async () => {
     });
 
     return (
-        <div className="h-full w-full flex flex-col space-y-6 text-primary items-center bg-[#ffffff] dark:bg-[#1E1F22] py-4">
+        <div className="h-full w-full flex flex-col space-y-6 text-primary items-center bg-[#e1e1e1] dark:bg-[#1E1F22] py-4">
             <NavigationAction />
             <Separator
                 className="h-[2px] bg-zinc-300 dark:bg-zinc-700 rounded-md w-10
