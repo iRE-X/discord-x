@@ -6,6 +6,7 @@ import { Edit, Hash, Lock, Mic, Trash, Video } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ActionToolTip from "../Action-Tooltip";
+import useModal from "@/hooks/useModalStore";
 
 interface Props {
     channel: Channel;
@@ -22,6 +23,7 @@ const iconMap = {
 const ServerChannel = ({ channel, role, server }: Props) => {
     const [isMounted, setMounted] = useState(false);
     const { channelId } = useParams();
+    const { onOpen } = useModal();
 
     useEffect(() => {
         setMounted(true);
@@ -55,7 +57,11 @@ const ServerChannel = ({ channel, role, server }: Props) => {
                         </button>
                     </ActionToolTip>
                     <ActionToolTip label="Delete" side="top">
-                        <button>
+                        <button
+                            onClick={() =>
+                                onOpen("deleteChannel", { server, channel })
+                            }
+                        >
                             <Trash className="hidden group-hover:block h-4 w-4  text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" />
                         </button>
                     </ActionToolTip>

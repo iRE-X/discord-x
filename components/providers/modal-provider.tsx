@@ -8,6 +8,7 @@ import LeaveServerModal from "@/components/modals/leave-server-modal";
 import DeleteServerModal from "@/components/modals/delete-server-modal";
 import ManageMembersModal from "@/components/modals/manage-members-modal";
 import { useEffect, useState } from "react";
+import DeleteChannelModal from "../modals/delete-channel-modal";
 
 const ModalProvider = () => {
     const [isMounted, setMounted] = useState(false);
@@ -27,6 +28,7 @@ const ModalProvider = () => {
             <EditServerModal />
             <LeaveServerModal />
             <DeleteServerModal />
+            <DeleteChannelModal />
         </>
     );
 };
