@@ -11,6 +11,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import useModal from "@/hooks/useModalStore";
 
 interface Props {
     apiUrl: string;
@@ -30,6 +31,8 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
         resolver: zodResolver(formSchema),
         defaultValues: { content: "" },
     });
+
+    const { onOpen } = useModal();
 
     const isLoading = form.formState.isSubmitting;
 
@@ -57,6 +60,12 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
                             <FormControl>
                                 <div className="relative p-4 pb-6">
                                     <button
+                                        onClick={() =>
+                                            onOpen("messageFile", {
+                                                apiUrl,
+                                                query,
+                                            })
+                                        }
                                         type="button"
                                         className="absolute top-7 left-8 h-[24px] w-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 rounded-full transition flex justify-center items-center"
                                     >
