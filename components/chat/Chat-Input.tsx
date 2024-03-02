@@ -5,6 +5,9 @@ import { Input } from "@/components/ui/input";
 
 import { Plus, Smile } from "lucide-react";
 
+import qs from "query-string";
+import axios from "axios";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -30,8 +33,17 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
 
     const isLoading = form.formState.isSubmitting;
 
-    const onSubmit = async (data: FormData) => {
-        console.log(data);
+    const onSubmit = async (values: FormData) => {
+        try {
+            const url = qs.stringifyUrl({
+                url: apiUrl,
+                query,
+            });
+
+            await axios.post(url, values);
+        } catch (error) {
+            console.log("CHAT-INPUT ERROR:", error);
+        }
     };
 
     return (
