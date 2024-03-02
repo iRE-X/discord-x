@@ -3,15 +3,18 @@
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { Plus, Smile } from "lucide-react";
+import { Plus } from "lucide-react";
 
-import qs from "query-string";
 import axios from "axios";
+import qs from "query-string";
+
+import EmojiPicker from "@/components/Emoji-Picker";
+import useModal from "@/hooks/useModalStore";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import useModal from "@/hooks/useModalStore";
+import { useRouter } from "next/navigation";
 
 interface Props {
     apiUrl: string;
@@ -33,6 +36,7 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
     });
 
     const { onOpen } = useModal();
+    const router = useRouter();
 
     const isLoading = form.formState.isSubmitting;
 
@@ -44,6 +48,8 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
             });
 
             await axios.post(url, values);
+            form.reset();
+            router.refresh();
         } catch (error) {
             console.log("CHAT-INPUT ERROR:", error);
         }
@@ -82,7 +88,13 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
                                         {...field}
                                     />
                                     <div className="absolute top-7 right-8">
-                                        <Smile />
+                                        <EmojiPicker
+                                            onChange={(emoji: string) =>
+                                                field.onChange(
+                                                    `${field.value}${emoji}`
+                                                )
+                                            }
+                                        />
                                     </div>
                                 </div>
                             </FormControl>
