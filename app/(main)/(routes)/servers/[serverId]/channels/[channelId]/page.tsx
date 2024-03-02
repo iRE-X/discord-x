@@ -1,9 +1,11 @@
-import currentProfile from "@/lib/current-profile";
-import { redirectToSignIn } from "@clerk/nextjs";
-import prisma from "@/prisma/db";
-import React from "react";
-import { redirect } from "next/navigation";
 import ChatHeader from "@/components/chat/Chat-Header";
+import ChatInput from "@/components/chat/Chat-Input";
+
+import currentProfile from "@/lib/current-profile";
+import prisma from "@/prisma/db";
+
+import { redirectToSignIn } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 interface Props {
     params: {
@@ -32,11 +34,18 @@ const ChannelPage = async ({ params: { channelId, serverId } }: Props) => {
     if (!channel || !member) return redirect("/");
 
     return (
-        <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
+        <div className="bg-white dark:bg-[#313338] flex flex-col h-screen">
             <ChatHeader
                 name={channel.name}
                 serverId={serverId}
                 type="channel"
+            />
+            <div className="flex-1">Messages</div>
+            <ChatInput
+                apiUrl="/api/socket/message"
+                type="channel"
+                name={channel.name}
+                query={{ channelId, serverId }}
             />
         </div>
     );

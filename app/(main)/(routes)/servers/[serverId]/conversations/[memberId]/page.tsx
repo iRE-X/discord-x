@@ -5,6 +5,7 @@ import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import prisma from "@/prisma/db";
 import React from "react";
+import ChatInput from "@/components/chat/Chat-Input";
 
 interface Props {
     params: {
@@ -42,12 +43,19 @@ const MemberPage = async ({ params: { memberId, serverId } }: Props) => {
         memberOne.profile.id === profile.id ? memberTwo : memberOne;
 
     return (
-        <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
+        <div className="bg-white dark:bg-[#313338] flex flex-col h-screen">
             <ChatHeader
                 type="conversation"
                 name={otherMember.profile.name}
                 imageUrl={otherMember.profile.imageUrl}
                 serverId={serverId}
+            />
+            <div className="flex-1">Messages</div>
+            <ChatInput
+                apiUrl="/api/socket/message"
+                type="conversation"
+                name={otherMember.profile.name}
+                query={{ memberId, serverId }}
             />
         </div>
     );
