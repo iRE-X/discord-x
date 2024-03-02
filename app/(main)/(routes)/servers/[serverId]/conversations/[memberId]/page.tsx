@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import prisma from "@/prisma/db";
 import React from "react";
 import ChatInput from "@/components/chat/Chat-Input";
+import ChatMessages from "@/components/chat/Chat-Messages";
 
 interface Props {
     params: {
@@ -50,12 +51,30 @@ const MemberPage = async ({ params: { memberId, serverId } }: Props) => {
                 imageUrl={otherMember.profile.imageUrl}
                 serverId={serverId}
             />
-            <div className="flex-1">Messages</div>
+            <ChatMessages
+                member={currentMember}
+                name={otherMember.profile.name}
+                type="conversation"
+                apiUrl="/api/messages"
+                socketUrl="/api/socket/messages"
+                socketQuery={{
+                    memberOneId: currentMember.id,
+                    memberTwoId: otherMember.id,
+                    serverId,
+                }}
+                paramKey="conversationId"
+                paramValue={conversation.id}
+                chatId={conversation.id}
+            />
             <ChatInput
                 apiUrl="/api/socket/message"
                 type="conversation"
                 name={otherMember.profile.name}
-                query={{ memberId, serverId }}
+                query={{
+                    memberOneId: currentMember.id,
+                    memberTwoId: otherMember.id,
+                    serverId,
+                }}
             />
         </div>
     );
