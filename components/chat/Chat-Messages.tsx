@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { Fragment } from "react";
 import ChatItem from "./Chat-Item";
 import ChatWelcome from "./Chat-Welcome";
+import useChatSocket from "@/hooks/useChatSocket";
 
 type MessageWithMemberWithProfile = Message & {
     member: Member & { profile: Profile };
@@ -38,8 +39,13 @@ const ChatMessages = ({
     member,
 }: Props) => {
     const queryKey = `chat:${chatId}`;
+    const addKey = `chat:${chatId}:messages`;
+    const updateKey = `chat:${chatId}:messages:update`;
+
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
         useChatQuery({ apiUrl, paramKey, paramValue, queryKey });
+
+    useChatSocket({ addKey, updateKey, queryKey });
 
     if (status !== "success") {
         return (

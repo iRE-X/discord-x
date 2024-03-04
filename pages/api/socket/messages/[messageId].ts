@@ -88,7 +88,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
             });
         }
 
-        if (req.method == "PATCH") {
+        if (req.method === "PATCH") {
             if (!isOwner)
                 return res
                     .status(401)
