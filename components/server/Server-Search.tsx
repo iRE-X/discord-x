@@ -29,7 +29,7 @@ interface Props {
 const ServerSearch = ({ data }: Props) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
-    const { serverId } = useParams();
+    const params = useParams();
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
@@ -47,10 +47,10 @@ const ServerSearch = ({ data }: Props) => {
         setOpen(false);
 
         if (type === "channel")
-            router.push(`/servers/${serverId}/channels/${id}`);
+            router.push(`/servers/${params?.serverId}/channels/${id}`);
 
         if (type === "member")
-            router.push(`/servers/${serverId}/conversations/${id}`);
+            router.push(`/servers/${params?.serverId}/conversations/${id}`);
     };
 
     return (
