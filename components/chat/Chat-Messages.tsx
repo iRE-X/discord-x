@@ -1,10 +1,12 @@
 "use client";
 
-import { Member, Message, Profile } from "@prisma/client";
-import React, { Fragment } from "react";
-import ChatWelcome from "./Chat-Welcome";
 import useChatQuery from "@/hooks/useChatQuery";
+import { Member, Message, Profile } from "@prisma/client";
 import { Loader2, ServerCrash } from "lucide-react";
+import { format } from "date-fns";
+import { Fragment } from "react";
+import ChatItem from "./Chat-Item";
+import ChatWelcome from "./Chat-Welcome";
 
 type MessageWithMemberWithProfile = Message & {
     member: Member & { profile: Profile };
@@ -22,6 +24,8 @@ interface Props {
     paramValue: string;
 }
 
+const DATE_FORMAT = "d MMM yyy, HH:mm";
+
 const ChatMessages = ({
     name,
     type,
@@ -29,6 +33,9 @@ const ChatMessages = ({
     paramValue,
     apiUrl,
     chatId,
+    socketQuery,
+    socketUrl,
+    member,
 }: Props) => {
     const queryKey = `chat:${chatId}`;
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
@@ -59,7 +66,22 @@ const ChatMessages = ({
                 {data?.pages.map((page, i) => (
                     <Fragment key={i}>
                         {page.items.map((m: MessageWithMemberWithProfile) => (
-                            <div key={m.id}>{m.content}</div>
+                            <ChatItem
+                                key={m.id}
+                                id={m.id}
+                                content={m.content}
+                                deleted={m.deleted}
+                                fileUrl={m.fileUrl}
+                                member={m.member}
+                                socketUrl={socketUrl}
+                                socketQuery={socketQuery}
+                                currentMember={member}
+                                timeStamp={format(
+                                    new Date(m.createdAt),
+                                    DATE_FORMAT
+                                )}
+                                isUpdated={m.updatedAt !== m.createdAt}
+                            />
                         ))}
                     </Fragment>
                 ))}

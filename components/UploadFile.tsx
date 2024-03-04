@@ -3,6 +3,7 @@ import Image from "next/image";
 import { File, X } from "lucide-react";
 import { UploadDropzone } from "@/lib/uploadthing";
 import "@uploadthing/react/styles.css";
+import Link from "next/link";
 
 interface Props {
     onChange: (url?: string) => void;
@@ -15,12 +16,22 @@ const UploadFile = ({ onChange, value, endPoint }: Props) => {
 
     if (value && fileType !== "pdf")
         return (
-            <div className="relative h-20 w-20">
+            <div
+                className={
+                    endPoint === "serverImage"
+                        ? "relative h-20 w-20"
+                        : "relative h-48 w-48"
+                }
+            >
                 <Image
                     fill
                     src={value}
                     alt="serverImage"
-                    className="rounded-full"
+                    className={
+                        endPoint === "serverImage"
+                            ? "rounded-full"
+                            : "object-contain"
+                    }
                     sizes="100%"
                 />
                 <button
@@ -36,14 +47,14 @@ const UploadFile = ({ onChange, value, endPoint }: Props) => {
         return (
             <div className="relative flex flex-col items-center p-2 mt-2 rounded-md bg-background/10">
                 <File className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
-                <a
+                <Link
                     href={value}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-2 mx-2 text-sm hover:underline"
                 >
                     Click to View
-                </a>
+                </Link>
                 <button
                     className="absolute -top-2 -right-2 rounded-full text-white bg-rose-500"
                     onClick={() => onChange("")}

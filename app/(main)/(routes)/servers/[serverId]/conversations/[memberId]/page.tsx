@@ -51,7 +51,8 @@ const MemberPage = async ({ params: { memberId, serverId } }: Props) => {
                 imageUrl={otherMember.profile.imageUrl}
                 serverId={serverId}
             />
-            <ChatMessages
+            <div className="flex-1" />
+            {/* <ChatMessages
                 member={currentMember}
                 name={otherMember.profile.name}
                 type="conversation"
@@ -65,7 +66,7 @@ const MemberPage = async ({ params: { memberId, serverId } }: Props) => {
                 paramKey="conversationId"
                 paramValue={conversation.id}
                 chatId={conversation.id}
-            />
+            /> */}
             <ChatInput
                 apiUrl="/api/socket/message"
                 type="conversation"
