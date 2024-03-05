@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
+import { ElementRef, useEffect, useRef } from "react";
 
 interface Props {
     apiUrl: string;
@@ -37,6 +38,7 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
 
     const { onOpen } = useModal();
     const router = useRouter();
+    const ref = useRef<ElementRef<"input">>(null);
 
     const isLoading = form.formState.isSubmitting;
 
@@ -54,6 +56,11 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
             console.log("CHAT-INPUT ERROR:", error);
         }
     };
+
+    useEffect(() => {
+        ref?.current?.focus();
+        console.log("heelo");
+    }, [isLoading]);
 
     return (
         <Form {...form}>
@@ -86,6 +93,7 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
                                                 : name
                                         }`}
                                         {...field}
+                                        ref={ref}
                                     />
                                     <div className="absolute top-7 right-8">
                                         <EmojiPicker
