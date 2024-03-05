@@ -59,7 +59,6 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
 
     useEffect(() => {
         ref?.current?.focus();
-        console.log("heelo");
     }, [isLoading]);
 
     return (

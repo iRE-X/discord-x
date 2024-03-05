@@ -29,7 +29,7 @@ const ChatHeader = ({ name, serverId, type, imageUrl }: Props) => {
             </p>
             <div className="ml-auto flex items-center">
                 {type === "conversation" && <ChatVideoButton />}
-                {/* <SocketIndicator /> */}
+                <SocketIndicator />
             </div>
         </div>
     );

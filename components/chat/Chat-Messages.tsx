@@ -49,7 +49,7 @@ const ChatMessages = ({
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
         useChatQuery({ apiUrl, paramKey, paramValue, queryKey });
 
-    // useChatSocket({ addKey, updateKey, queryKey });
+    useChatSocket({ addKey, updateKey, queryKey });
     useChatScroll({
         chatRef,
         bottomRef,
