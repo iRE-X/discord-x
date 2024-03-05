@@ -1,9 +1,9 @@
 import currentProfilePages from "@/lib/current-profile-pages";
 import { NextApiResponseServerIo } from "@/types";
-import { NextApiRequest } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/db";
 
-const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "DELETE" && req.method !== "PATCH")
         return res.status(405).json({ error: "Method Not Allowed" });
 
@@ -108,8 +108,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
             });
         }
 
-        const updateKey = `chat:${conversationId}:messages:update`;
-        res.socket.server.io.emit(updateKey, message);
+        // const updateKey = `chat:${conversationId}:messages:update`;
+        // res.socket.server.io.emit(updateKey, message);
 
         return res.status(200).json(message);
     } catch (error) {

@@ -1,9 +1,9 @@
 import currentProfilePages from "@/lib/current-profile-pages";
 import prisma from "@/prisma/db";
 import { NextApiResponseServerIo } from "@/types";
-import { NextApiRequest } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "POST")
         return res.status(405).json({ error: "Method Not Allowed" });
 
@@ -67,8 +67,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
             },
         });
 
-        const channelKey = `chat:${channel.id}:messages`;
-        res.socket.server.io.emit(channelKey, message);
+        // const channelKey = `chat:${channel.id}:messages`;
+        // res.socket.server.io.emit(channelKey, message);
 
         return res.status(200).json(message);
     } catch (error) {
