@@ -11,53 +11,50 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
         const profile = await currentProfilePages(req);
         if (!profile) return res.status(401).json({ error: "Unauthorized" });
 
-        const { serverId, channelId, messageId } = req.query;
+        const { conversationId, directMessageId } = req.query;
         const { content } = req.body;
 
-        if (!serverId)
-            return res.status(400).json({ error: "serverId is missing" });
-        if (!channelId)
-            return res.status(400).json({ error: "channelId is missing" });
-        if (!messageId)
-            return res.status(400).json({ error: "messageId is missing" });
+        if (!conversationId)
+            return res
+                .status(400)
+                .json({ error: "conversation Id is missing" });
 
-        const server = await prisma.server.findFirst({
+        const conversation = await prisma.conversation.findUnique({
             where: {
-                id: serverId as string,
-                channels: {
-                    some: {
-                        id: channelId as string,
+                id: conversationId as string,
+            },
+            include: {
+                memberOne: {
+                    include: {
+                        profile: true,
+                    },
+                },
+                memberTwo: {
+                    include: {
+                        profile: true,
                     },
                 },
             },
-            include: {
-                members: true,
-            },
         });
 
-        if (!server) return res.status(404).json({ error: "Server not found" });
+        if (!conversation)
+            return res.status(404).json({ error: "Conversation not found" });
 
-        const channel = await prisma.channel.findUnique({
+        let message = await prisma.directMessage.findUnique({
             where: {
-                id: channelId as string,
-                serverId: serverId as string,
-            },
-        });
-
-        if (!channel)
-            return res.status(404).json({ error: "Channel not found" });
-
-        let message = await prisma.message.findUnique({
-            where: {
-                id: messageId as string,
-                channelId: channelId as string,
+                id: directMessageId as string,
+                conversationId: conversationId as string,
             },
         });
 
         if (!message || message.deleted)
             return res.status(404).json({ error: "Message not found" });
 
-        const member = server?.members.find(m => m.profileId === profile.id);
+        const member =
+            conversation.memberOne.profileId === profile.id
+                ? conversation.memberOne
+                : conversation.memberTwo;
+
         if (!member) return res.status(404).json({ error: "Member not found" });
 
         const isOwner = member?.id === message?.memberId;
@@ -69,9 +66,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
         if (!canModify)
             return res.status(401).json({ error: "Unauthorized to modify" });
         if (req.method === "DELETE") {
-            message = await prisma.message.update({
+            message = await prisma.directMessage.update({
                 where: {
-                    id: messageId as string,
+                    id: directMessageId as string,
                 },
                 data: {
                     content: "This message has been deleted",
@@ -94,9 +91,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
                     .status(401)
                     .json({ error: "Unauthorized to Edit message" });
 
-            message = await prisma.message.update({
+            message = await prisma.directMessage.update({
                 where: {
-                    id: messageId as string,
+                    id: directMessageId as string,
                 },
                 data: {
                     content,
@@ -111,12 +108,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
             });
         }
 
-        const updateKey = `chat:${channelId}:messages:update`;
+        const updateKey = `chat:${conversationId}:messages:update`;
         res.socket.server.io.emit(updateKey, message);
 
         return res.status(200).json(message);
     } catch (error) {
-        console.log("SOCKET-MESSAGE_ID ERROR: ", error);
+        console.log("SOCKET-DIRECT-MESSAGE_ID ERROR: ", error);
         return res.status(500).json({ error: "Internal Error" });
     }
 };

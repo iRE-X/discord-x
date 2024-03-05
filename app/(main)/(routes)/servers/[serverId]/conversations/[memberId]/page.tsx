@@ -52,28 +52,26 @@ const MemberPage = async ({ params: { memberId, serverId } }: Props) => {
                 serverId={serverId}
             />
             <div className="flex-1" />
-            {/* <ChatMessages
+            <ChatMessages
                 member={currentMember}
                 name={otherMember.profile.name}
                 type="conversation"
-                apiUrl="/api/messages"
-                socketUrl="/api/socket/messages"
+                apiUrl="/api/direct-messages"
+                socketUrl="/api/socket/direct-messages"
                 socketQuery={{
-                    memberOneId: currentMember.id,
-                    memberTwoId: otherMember.id,
+                    conversationId: conversation.id,
                     serverId,
                 }}
                 paramKey="conversationId"
                 paramValue={conversation.id}
                 chatId={conversation.id}
-            /> */}
+            />
             <ChatInput
-                apiUrl="/api/socket/message"
+                apiUrl="/api/socket/direct-messages"
                 type="conversation"
                 name={otherMember.profile.name}
                 query={{
-                    memberOneId: currentMember.id,
-                    memberTwoId: otherMember.id,
+                    conversationId: conversation.id,
                     serverId,
                 }}
             />
