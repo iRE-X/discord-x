@@ -12,10 +12,12 @@ import EmojiPicker from "@/components/Emoji-Picker";
 import useModal from "@/hooks/useModalStore";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { ElementRef, useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { addNewMessage } from "@/lib/message-service";
 
 interface Props {
     apiUrl: string;
@@ -38,6 +40,8 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
 
     const { onOpen } = useModal();
     const router = useRouter();
+    const queryClient = useQueryClient();
+
     const ref = useRef<ElementRef<"input">>(null);
 
     const isLoading = form.formState.isSubmitting;
@@ -49,7 +53,9 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
                 query,
             });
 
-            await axios.post(url, values);
+            const { data } = await axios.post(url, values);
+            addNewMessage(query, queryClient, data);
+
             form.reset();
             router.refresh();
         } catch (error) {

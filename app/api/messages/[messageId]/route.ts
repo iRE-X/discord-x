@@ -23,8 +23,6 @@ export async function PATCH(req: Request, { params: { messageId } }: Props) {
 
         const { content } = await req.json();
 
-        console.log(messageId);
-
         if (!serverId)
             return NextResponse.json(
                 { error: "serverId is missing" },

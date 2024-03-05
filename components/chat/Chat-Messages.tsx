@@ -49,7 +49,6 @@ const ChatMessages = ({
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
         useChatQuery({ apiUrl, paramKey, paramValue, queryKey });
 
-    // useChatSocket({ addKey, updateKey, queryKey });
     useChatScroll({
         chatRef,
         bottomRef,
@@ -57,6 +56,7 @@ const ChatMessages = ({
         shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
         count: data?.pages?.[0]?.items?.length ?? 0,
     });
+    // useChatSocket({ addKey, updateKey, queryKey });
 
     if (status !== "success") {
         return (

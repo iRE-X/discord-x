@@ -33,7 +33,7 @@ const useChatQuery = ({ apiUrl, paramKey, paramValue, queryKey }: Props) => {
             queryKey: [queryKey],
             queryFn: fetchMessages,
             getNextPageParam: lastpage => lastpage?.nextCursor,
-            refetchInterval: 1000,
+            refetchInterval: false,
         });
 
     return { data, fetchNextPage, isFetchingNextPage, hasNextPage, status };
