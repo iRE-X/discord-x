@@ -51,7 +51,6 @@ const MemberPage = async ({ params: { memberId, serverId } }: Props) => {
                 imageUrl={otherMember.profile.imageUrl}
                 serverId={serverId}
             />
-            <div className="flex-1" />
             <ChatMessages
                 member={currentMember}
                 name={otherMember.profile.name}
