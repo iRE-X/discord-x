@@ -34,12 +34,12 @@ export default function RootLayout({
                         defaultTheme="dark"
                         storageKey="discordx-theme"
                     >
-                        <SocketProvider>
-                            <QueryProvider>
-                                <ModalProvider />
-                                {children}
-                            </QueryProvider>
-                        </SocketProvider>
+                        {/* <SocketProvider> */}
+                        <QueryProvider>
+                            <ModalProvider />
+                            {children}
+                        </QueryProvider>
+                        {/* </SocketProvider> */}
                     </ThemeProvider>
                 </body>
             </html>

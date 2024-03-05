@@ -40,8 +40,8 @@ const ChatMessages = ({
     member,
 }: Props) => {
     const queryKey = `chat:${chatId}`;
-    const addKey = `chat:${chatId}:messages`;
-    const updateKey = `chat:${chatId}:messages:update`;
+    // const addKey = `chat:${chatId}:messages`;
+    // const updateKey = `chat:${chatId}:messages:update`;
 
     const chatRef = useRef<ElementRef<"div">>(null);
     const bottomRef = useRef<ElementRef<"div">>(null);
@@ -49,7 +49,7 @@ const ChatMessages = ({
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
         useChatQuery({ apiUrl, paramKey, paramValue, queryKey });
 
-    useChatSocket({ addKey, updateKey, queryKey });
+    // useChatSocket({ addKey, updateKey, queryKey });
     useChatScroll({
         chatRef,
         bottomRef,

@@ -81,3 +81,95 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: "Internal Error" }, { status: 500 });
     }
 }
+
+export async function POST(req: Request) {
+    try {
+        const profile = await currentProfile();
+        if (!profile)
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );
+
+        const { searchParams } = new URL(req.url);
+        const serverId = searchParams.get("serverId");
+        const channelId = searchParams.get("channelId");
+
+        if (!serverId)
+            return NextResponse.json(
+                { error: "serverId is missing" },
+                { status: 400 }
+            );
+        if (!channelId)
+            return NextResponse.json(
+                { error: "channelId is missing" },
+                { status: 400 }
+            );
+
+        const { content, fileUrl } = await req.json();
+
+        const server = await prisma.server.findUnique({
+            where: {
+                id: serverId,
+                members: {
+                    some: {
+                        profileId: profile.id,
+                    },
+                },
+            },
+            include: {
+                members: true,
+            },
+        });
+
+        if (!server)
+            return NextResponse.json(
+                { error: "Server not found" },
+                { status: 404 }
+            );
+
+        const channel = await prisma.channel.findUnique({
+            where: {
+                id: channelId,
+                serverId: serverId,
+            },
+        });
+
+        if (!channel)
+            return NextResponse.json(
+                { error: "Channel not found" },
+                { status: 404 }
+            );
+
+        const member = server.members.find(
+            member => member.profileId === profile.id
+        );
+
+        if (!member)
+            return NextResponse.json(
+                { error: "Member not found" },
+                { status: 404 }
+            );
+
+        const message = await prisma.message.create({
+            data: {
+                content,
+                fileUrl,
+                channelId: channel.id,
+                memberId: member.id,
+            },
+            include: {
+                member: {
+                    include: {
+                        profile: true,
+                    },
+                },
+            },
+        });
+
+        return NextResponse.json(message);
+    } catch (error) {
+        console.log("MESSAGE-POST ERROR: ", error);
+        return NextResponse.json({ error: "Internal Error" }, { status: 500 });
+    }
+}

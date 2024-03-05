@@ -81,3 +81,87 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: "Internal Error" }, { status: 500 });
     }
 }
+
+export async function POST(req: Request) {
+    try {
+        const profile = await currentProfile();
+        if (!profile)
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );
+
+        const { searchParams } = new URL(req.url);
+        const conversationId = searchParams.get("conversationId");
+
+        if (!conversationId)
+            return NextResponse.json(
+                { error: "conversation ID is missing" },
+                { status: 400 }
+            );
+
+        const { content, fileUrl } = await req.json();
+
+        if (!content)
+            return NextResponse.json(
+                { error: "content is missing" },
+                { status: 400 }
+            );
+
+        const conversation = await prisma.conversation.findUnique({
+            where: {
+                id: conversationId,
+            },
+            include: {
+                memberOne: {
+                    include: {
+                        profile: true,
+                    },
+                },
+                memberTwo: {
+                    include: {
+                        profile: true,
+                    },
+                },
+            },
+        });
+
+        if (!conversation)
+            return NextResponse.json(
+                { error: "conversation not found" },
+                { status: 404 }
+            );
+
+        const member =
+            conversation.memberOne.profileId === profile.id
+                ? conversation.memberOne
+                : conversation.memberTwo;
+
+        if (!member)
+            return NextResponse.json(
+                { error: "Member not found" },
+                { status: 404 }
+            );
+
+        const message = await prisma.directMessage.create({
+            data: {
+                content,
+                fileUrl,
+                conversationId,
+                memberId: member.id,
+            },
+            include: {
+                member: {
+                    include: {
+                        profile: true,
+                    },
+                },
+            },
+        });
+
+        return NextResponse.json(message);
+    } catch (error) {
+        console.log("DIRECT-MESSAGE-POST ERROR: ", error);
+        return NextResponse.json({ error: "Internal Error" }, { status: 500 });
+    }
+}

@@ -13,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
         const { conversationId } = req.query;
 
         if (!profile) return res.status(401).json({ error: "Unauthorized" });
-        if (!content) return res.status(401).json({ error: "content missing" });
+        if (!content) return res.status(400).json({ error: "content missing" });
         if (!conversationId)
             return res.status(401).json({ error: "conversation ID missing" });
 
