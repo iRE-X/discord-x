@@ -6,6 +6,7 @@ interface Props {
     loadMore: () => void;
     shouldLoadMore: boolean;
     count: number;
+    isRefetching: boolean;
 }
 
 const useChatScroll = ({
@@ -14,6 +15,7 @@ const useChatScroll = ({
     loadMore,
     shouldLoadMore,
     count,
+    isRefetching,
 }: Props) => {
     const [hasInitialized, setInitialized] = useState(false);
 
@@ -56,7 +58,7 @@ const useChatScroll = ({
                 });
             }, 100);
         }
-    }, [bottomRef, chatRef, count, hasInitialized]);
+    }, [bottomRef, chatRef, count, isRefetching, hasInitialized]);
 };
 
 export default useChatScroll;

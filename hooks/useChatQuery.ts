@@ -28,15 +28,12 @@ const useChatQuery = ({ apiUrl, paramKey, paramValue, queryKey }: Props) => {
         return res.json();
     };
 
-    const { data, fetchNextPage, isFetchingNextPage, hasNextPage, status } =
-        useInfiniteQuery({
-            queryKey: [queryKey],
-            queryFn: fetchMessages,
-            getNextPageParam: lastpage => lastpage?.nextCursor,
-            refetchInterval: 1000,
-        });
-
-    return { data, fetchNextPage, isFetchingNextPage, hasNextPage, status };
+    return useInfiniteQuery({
+        queryKey: [queryKey],
+        queryFn: fetchMessages,
+        getNextPageParam: lastpage => lastpage?.nextCursor,
+        refetchInterval: 1000,
+    });
 };
 
 export default useChatQuery;
