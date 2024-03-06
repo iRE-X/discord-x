@@ -1,7 +1,11 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { LiveKitRoom, VideoConference } from "@livekit/components-react";
+import {
+    LiveKitRoom,
+    VideoConference,
+    AudioConference,
+} from "@livekit/components-react";
 import "@livekit/components-styles";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -54,8 +58,9 @@ const MediaRoom = ({ chatId, audio, video }: Props) => {
             connect
             serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
             data-lk-theme="default"
+            className="flex-1"
         >
-            <VideoConference />
+            {video ? <VideoConference /> : audio ? <AudioConference /> : null}
         </LiveKitRoom>
     );
 };
