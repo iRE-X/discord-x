@@ -7,7 +7,7 @@ const MobileToggle = ({ serverId }: { serverId: string }) => {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <button className="md:hidden mr-2">
+                <button className="fixed md:hidden mr-2">
                     <Menu />
                 </button>
             </SheetTrigger>
