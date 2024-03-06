@@ -48,7 +48,7 @@ const useChatScroll = ({
             const distanceFromBottom =
                 topDiv.scrollHeight - topDiv.scrollTop - topDiv.clientHeight;
 
-            return distanceFromBottom <= 500;
+            return distanceFromBottom <= 300;
         };
 
         if (shouldAutoScroll()) {

@@ -39,7 +39,7 @@ const ChannelPage = async ({ params: { channelId, serverId } }: Props) => {
     return (
         <div className="flex items-center">
             <MobileToggle serverId={serverId} />
-            <div className="bg-white dark:bg-[#313338] flex-1 flex flex-col h-fit md:h-screen">
+            <div className="bg-white dark:bg-[#313338] flex-1 flex flex-col h-screen">
                 <ChatHeader
                     name={channel.name}
                     serverId={serverId}
