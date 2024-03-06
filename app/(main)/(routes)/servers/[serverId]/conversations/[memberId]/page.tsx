@@ -52,42 +52,39 @@ const MemberPage = async ({
         memberOne.profile.id === profile.id ? memberTwo : memberOne;
 
     return (
-        <div className="flex items-center">
-            <MobileToggle serverId={serverId} />
-            <div className="bg-white dark:bg-[#313338] flex-1 flex flex-col h-screen">
-                <ChatHeader
-                    type="conversation"
-                    name={otherMember.profile.name}
-                    imageUrl={otherMember.profile.imageUrl}
-                    serverId={serverId}
-                />
-                {video && <MediaRoom chatId={conversation.id} video audio />}
-                {!video && (
-                    <>
-                        <ChatMessages
-                            member={currentMember}
-                            name={otherMember.profile.name}
-                            type="conversation"
-                            apiUrl="/api/direct-messages"
-                            socketUrl="/api/direct-messages"
-                            socketQuery={{
-                                conversationId: conversation.id,
-                            }}
-                            paramKey="conversationId"
-                            paramValue={conversation.id}
-                            chatId={conversation.id}
-                        />
-                        <ChatInput
-                            apiUrl="/api/direct-messages"
-                            type="conversation"
-                            name={otherMember.profile.name}
-                            query={{
-                                conversationId: conversation.id,
-                            }}
-                        />
-                    </>
-                )}
-            </div>
+        <div className="bg-white dark:bg-[#313338] flex-1 flex flex-col h-screen">
+            <ChatHeader
+                type="conversation"
+                name={otherMember.profile.name}
+                imageUrl={otherMember.profile.imageUrl}
+                serverId={serverId}
+            />
+            {video && <MediaRoom chatId={conversation.id} video audio />}
+            {!video && (
+                <>
+                    <ChatMessages
+                        member={currentMember}
+                        name={otherMember.profile.name}
+                        type="conversation"
+                        apiUrl="/api/direct-messages"
+                        socketUrl="/api/direct-messages"
+                        socketQuery={{
+                            conversationId: conversation.id,
+                        }}
+                        paramKey="conversationId"
+                        paramValue={conversation.id}
+                        chatId={conversation.id}
+                    />
+                    <ChatInput
+                        apiUrl="/api/direct-messages"
+                        type="conversation"
+                        name={otherMember.profile.name}
+                        query={{
+                            conversationId: conversation.id,
+                        }}
+                    />
+                </>
+            )}
         </div>
     );
 };

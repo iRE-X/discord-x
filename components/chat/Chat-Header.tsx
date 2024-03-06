@@ -14,14 +14,14 @@ interface Props {
 const ChatHeader = ({ name, serverId, type, imageUrl }: Props) => {
     return (
         <div className="flex items-center px-3 font-semibold rounded border-neutral-200 dark:border-neutral-800 h-12 border-b-2">
-            {/* <MobileToggle serverId={serverId} /> */}
+            <MobileToggle serverId={serverId} />
             {type === "channel" && (
-                <Hash className="h-5 w-5 text-zinc-500 dark:text-zinc-400 mr-2" />
+                <Hash className="h-5 w-5 text-zinc-500 dark:text-zinc-400 mr-2 ml-7 md:ml-0" />
             )}
             {type === "conversation" && (
                 <UserAvatar
                     src={imageUrl}
-                    className="h-8 w-8 md:h-8 md:w-8 mr-2"
+                    className="h-8 w-8 md:h-8 md:w-8 mr-2 ml-7 md:ml-0"
                 />
             )}
             <p className="font-semibold text-base text-black dark:text-white">
