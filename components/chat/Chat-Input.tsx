@@ -3,7 +3,7 @@
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { Plus } from "lucide-react";
+import { Plus, SendHorizonal } from "lucide-react";
 
 import axios from "axios";
 import qs from "query-string";
@@ -76,7 +76,7 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <div className="relative p-4 pb-6">
+                                <div className="relative p-4 pb-6 flex gap-x-5">
                                     <button
                                         onClick={() =>
                                             onOpen("messageFile", {
@@ -91,7 +91,7 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
                                     </button>
                                     <Input
                                         // disabled={isLoading}
-                                        className="px-14 py-6 dark:bg-zinc-700/75 bg-zinc-200/90 focus-visible:ring-0 focus-visible:ring-offset-0 border-none border-0 text-zinc-600 dark:text-zinc-200"
+                                        className="pl-14 pr-24 py-6 dark:bg-zinc-700/75 bg-zinc-200/90 focus-visible:ring-0 focus-visible:ring-offset-0 border-none border-0 text-zinc-600 dark:text-zinc-200"
                                         placeholder={`Message ${
                                             type === "channel"
                                                 ? "#" + name
@@ -100,7 +100,7 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
                                         {...field}
                                         ref={ref}
                                     />
-                                    <div className="absolute top-7 right-8">
+                                    <div className="absolute top-7 right-20">
                                         <EmojiPicker
                                             onChange={(emoji: string) =>
                                                 field.onChange(
@@ -109,6 +109,12 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
                                             }
                                         />
                                     </div>
+                                    <button
+                                        className="absolute top-5 right-5 p-2 border-2 rounded-full text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 border-zinc-500 dark:border-zinc-400 hover:border-zinc-600 dark:hover:border-zinc-300"
+                                        type="submit"
+                                    >
+                                        <SendHorizonal />
+                                    </button>
                                 </div>
                             </FormControl>
                         </FormItem>
