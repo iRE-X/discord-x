@@ -1,5 +1,5 @@
 import { Member, Message, Profile } from "@prisma/client";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 
 type MessageWithMemberWithProfile = Message & {
     member: Member & { profile: Profile };

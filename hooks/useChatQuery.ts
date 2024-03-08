@@ -10,7 +10,7 @@ interface Props {
 }
 
 const useChatQuery = ({ apiUrl, paramKey, paramValue, queryKey }: Props) => {
-    // const { isConnected } = useSocket();
+    const { isConnected } = useSocket();
 
     const fetchMessages = async ({ pageParam = undefined }) => {
         const url = qs.stringifyUrl(
@@ -32,7 +32,7 @@ const useChatQuery = ({ apiUrl, paramKey, paramValue, queryKey }: Props) => {
         queryKey: [queryKey],
         queryFn: fetchMessages,
         getNextPageParam: lastpage => lastpage?.nextCursor,
-        refetchInterval: 1000,
+        refetchInterval: isConnected ? false : 1000,
     });
 };
 

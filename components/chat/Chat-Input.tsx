@@ -16,8 +16,6 @@ import { useRouter } from "next/navigation";
 import { ElementRef, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { addNewMessage } from "@/lib/message-service";
 
 interface Props {
     apiUrl: string;
@@ -40,7 +38,6 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
 
     const { onOpen } = useModal();
     const router = useRouter();
-    const queryClient = useQueryClient();
 
     const ref = useRef<ElementRef<"input">>(null);
 
@@ -54,8 +51,7 @@ const ChatInput = ({ apiUrl, name, type, query }: Props) => {
             });
 
             form.reset();
-            const { data } = await axios.post(url, values);
-            addNewMessage(query, queryClient, data);
+            await axios.post(url, values);
 
             router.refresh();
         } catch (error) {

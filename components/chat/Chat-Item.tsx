@@ -25,8 +25,6 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import useModal from "@/hooks/useModalStore";
-import { useQueryClient } from "@tanstack/react-query";
-import { updateMessage } from "@/lib/message-service";
 
 interface Props {
     id: string;
@@ -69,7 +67,6 @@ const ChatItem = ({
     const { onOpen } = useModal();
     const router = useRouter();
     const params = useParams();
-    const queryClient = useQueryClient();
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -112,8 +109,7 @@ const ChatItem = ({
                 query: socketQuery,
             });
 
-            const { data } = await axios.patch(url, values);
-            updateMessage(socketQuery, queryClient, data);
+            await axios.patch(url, values);
         } catch (error) {
             console.log("EDIT-CHAT-ITEM ERROR: ", error);
         } finally {

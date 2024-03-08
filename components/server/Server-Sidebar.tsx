@@ -13,7 +13,6 @@ import ServerSearch from "./Server-Search";
 import ServerSection from "./Server-Section";
 import ServerChannel from "./Server-Channel";
 import ServerMember from "./Server-Member";
-import { Server } from "https";
 
 const iconMap = {
     TEXT: <Hash className="h-4 w-4 mr-2" />,

@@ -40,8 +40,8 @@ const ChatMessages = ({
     member,
 }: Props) => {
     const queryKey = `chat:${chatId}`;
-    // const addKey = `chat:${chatId}:messages`;
-    // const updateKey = `chat:${chatId}:messages:update`;
+    const addKey = `chat:${chatId}:messages`;
+    const updateKey = `chat:${chatId}:messages:update`;
 
     const chatRef = useRef<ElementRef<"div">>(null);
     const bottomRef = useRef<ElementRef<"div">>(null);
@@ -63,7 +63,7 @@ const ChatMessages = ({
         count: data?.pages?.[0]?.items?.length ?? 0,
         isRefetching,
     });
-    // useChatSocket({ addKey, updateKey, queryKey });
+    useChatSocket({ addKey, updateKey, queryKey });
 
     if (status !== "success") {
         return (

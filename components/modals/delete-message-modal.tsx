@@ -14,8 +14,6 @@ import useModal from "@/hooks/useModalStore";
 import axios from "axios";
 import qs from "query-string";
 import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { updateMessage } from "@/lib/message-service";
 
 const DeleteMessageModal = () => {
     const {
@@ -28,7 +26,6 @@ const DeleteMessageModal = () => {
     const openDialog = isOpen && type === "deleteMessage";
 
     const [isLoading, setLoading] = useState(false);
-    const queryClient = useQueryClient();
 
     const onDelete = async () => {
         try {
@@ -39,8 +36,7 @@ const DeleteMessageModal = () => {
                 query,
             });
 
-            const { data } = await axios.delete(url);
-            updateMessage(query!, queryClient, data);
+            await axios.delete(url);
 
             onClose();
         } catch (error) {
