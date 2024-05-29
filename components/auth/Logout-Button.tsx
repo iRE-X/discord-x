@@ -9,7 +9,7 @@ interface Props {
 const LogoutButton = ({ children }: Props) => {
   return (
     <span
-      onClick={() => signOut()}
+      onClick={() => signOut({ callbackUrl: "/" })}
       className="cursor-pointer flex items-center justify-center p-2"
     >
       {children}
