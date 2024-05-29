@@ -1,6 +1,6 @@
 "use client";
+import { signOut } from "next-auth/react";
 import React from "react";
-import Link from "next/link";
 
 interface Props {
   children?: React.ReactNode;
@@ -8,12 +8,17 @@ interface Props {
 
 const LogoutButton = ({ children }: Props) => {
   return (
-    <Link
-      href={"/api/auth/signout"}
+    <span
+      onClick={() =>
+        signOut({
+          callbackUrl: "https://discordx.up.railway.app/",
+          redirect: true,
+        })
+      }
       className="cursor-pointer flex items-center justify-center p-2"
     >
       {children}
-    </Link>
+    </span>
   );
 };
 
