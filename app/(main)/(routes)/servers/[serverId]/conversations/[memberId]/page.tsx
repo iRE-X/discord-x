@@ -1,14 +1,12 @@
 import ChatHeader from "@/components/chat/Chat-Header";
-import { getOrCreateConversation } from "@/lib/conversation";
-import currentProfile from "@/lib/current-profile";
-import { redirectToSignIn } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
-import prisma from "@/prisma/db";
-import React from "react";
 import ChatInput from "@/components/chat/Chat-Input";
 import ChatMessages from "@/components/chat/Chat-Messages";
 import MediaRoom from "@/components/Media-Room";
-import MobileToggle from "@/components/mobile-toggle";
+import { getOrCreateConversation } from "@/lib/conversation";
+import currentProfile from "@/lib/current-profile";
+import prisma from "@/prisma/db";
+import { LOGIN_URL } from "@/routes";
+import { redirect } from "next/navigation";
 
 interface Props {
     params: {
@@ -25,7 +23,7 @@ const MemberPage = async ({
     searchParams: { video },
 }: Props) => {
     const profile = await currentProfile();
-    if (!profile) return redirectToSignIn();
+    if (!profile) return redirect(LOGIN_URL);
 
     const currentMember = await prisma.member.findFirst({
         where: {
@@ -70,6 +68,7 @@ const MemberPage = async ({
                         socketUrl="/api/socket/direct-messages"
                         socketQuery={{
                             conversationId: conversation.id,
+                            profileId: profile.id,
                         }}
                         paramKey="conversationId"
                         paramValue={conversation.id}
@@ -81,6 +80,7 @@ const MemberPage = async ({
                         name={otherMember.profile.name}
                         query={{
                             conversationId: conversation.id,
+                            profileId: profile.id,
                         }}
                     />
                 </>

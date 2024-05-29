@@ -9,7 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
-        "@clerk/nextjs": "^4.29.7",
+        "@auth/prisma-adapter": "^1.6.0",
         "@emoji-mart/data": "^1.1.2",
         "@emoji-mart/react": "^1.1.1",
         "@hookform/resolvers": "^3.3.4",
@@ -29,6 +29,7 @@
         "@tanstack/react-query": "4.28",
         "@uploadthing/react": "^6.2.4",
         "axios": "^1.6.7",
+        "bcryptjs": "^2.4.3",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.0",
         "cmdk": "^0.2.1",
@@ -37,11 +38,14 @@
         "livekit-server-sdk": "^2.0.4",
         "lucide-react": "^0.336.0",
         "next": "14.1.1",
+        "next-auth": "^5.0.0-beta.16",
         "next-themes": "^0.2.1",
+        "nodemailer": "^6.9.13",
         "query-string": "^9.0.0",
         "react": "^18",
         "react-dom": "^18",
         "react-hook-form": "7.46",
+        "react-icons": "^5.1.0",
         "sharp": "^0.33.2",
         "socket.io": "^4.7.4",
         "socket.io-client": "^4.7.4",
@@ -53,7 +57,9 @@
         "zustand": "^4.5.1"
     },
     "devDependencies": {
+        "@types/bcryptjs": "^2.4.6",
         "@types/node": "^20",
+        "@types/nodemailer": "^6.4.15",
         "@types/react": "^18",
         "@types/react-dom": "^18",
         "@types/uuid": "^9.0.8",

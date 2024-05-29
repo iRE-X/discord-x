@@ -124,22 +124,37 @@ const ChatItem = ({
     };
 
     return (
-        <div className="relative group flex items-center p-4 hover:bg-black/5 transition w-full">
-            <div className="group flex gap-x-2 items-start w-full">
+        <div
+            className={cn(
+                "relative group flex items-center p-4 hover:bg-black/5 transition w-full",
+                isOwner && "justify-end"
+            )}
+        >
+            <div
+                className={cn(
+                    "group flex gap-x-2 items-start w-fit",
+                    isOwner && "flex-row-reverse"
+                )}
+            >
                 <div
                     onClick={onClickMember}
                     className="cursor-pointer hover:drop-shadow-md transition"
                 >
                     <UserAvatar src={member.profile.imageUrl} />
                 </div>
-                <div className="flex flex-col w-full">
+                <div
+                    className={cn(
+                        "flex flex-col w-full",
+                        isOwner && "items-end"
+                    )}
+                >
                     <div className="flex items-center gap-x-2">
                         <div className="flex items-center">
                             <p
                                 onClick={onClickMember}
                                 className="font-semibold text-sm hover:underline cursor-pointer"
                             >
-                                {member.profile.name}
+                                {isOwner ? "You" : member.profile.name}
                             </p>
                             <ActionToolTip label={member.role}>
                                 {roleIconMap[member.role]}

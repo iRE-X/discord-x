@@ -8,11 +8,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
         return res.status(405).json({ error: "Method Not Allowed" });
 
     try {
-        const profile = await currentProfilePages(req);
         const { content, fileUrl } = req.body;
-        const { conversationId } = req.query;
+        const { conversationId, profileId } = req.query;
 
-        if (!profile) return res.status(401).json({ error: "Unauthorized" });
+        if (!profileId) return res.status(401).json({ error: "Unauthorized" });
         if (!content) return res.status(400).json({ error: "content missing" });
         if (!conversationId)
             return res.status(401).json({ error: "conversation ID missing" });
@@ -39,7 +38,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
             return res.status(404).json({ error: "Conversation not found" });
 
         const member =
-            conversation.memberOne.profileId === profile.id
+            conversation.memberOne.profileId === profileId
                 ? conversation.memberOne
                 : conversation.memberTwo;
 

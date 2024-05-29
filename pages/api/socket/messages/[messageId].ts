@@ -1,4 +1,3 @@
-import currentProfilePages from "@/lib/current-profile-pages";
 import { NextApiResponseServerIo } from "@/types";
 import { NextApiRequest } from "next";
 import prisma from "@/prisma/db";
@@ -8,12 +7,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
         return res.status(405).json({ error: "Method Not Allowed" });
 
     try {
-        const profile = await currentProfilePages(req);
-        if (!profile) return res.status(401).json({ error: "Unauthorized" });
-
-        const { serverId, channelId, messageId } = req.query;
+        const { serverId, channelId, messageId, profileId } = req.query;
         const { content } = req.body;
 
+        if (!profileId) return res.status(401).json({ error: "Unauthorized" });
         if (!serverId)
             return res.status(400).json({ error: "serverId is missing" });
         if (!channelId)
@@ -57,7 +54,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
         if (!message || message.deleted)
             return res.status(404).json({ error: "Message not found" });
 
-        const member = server?.members.find(m => m.profileId === profile.id);
+        const member = server?.members.find(m => m.profileId === profileId);
         if (!member) return res.status(404).json({ error: "Member not found" });
 
         const isOwner = member?.id === message?.memberId;

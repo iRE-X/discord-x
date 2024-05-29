@@ -1,10 +1,11 @@
-import { auth } from "@clerk/nextjs";
+import { currentUser } from "@/lib/current-user";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 const f = createUploadthing();
 
-const handleAuth = () => {
-    const { userId } = auth();
+const handleAuth = async () => {
+    const user = await currentUser();
+    const userId = user?.id;
     if (!userId) throw new Error("Unauthorized");
     return { userId };
 };
@@ -12,11 +13,11 @@ const handleAuth = () => {
 export const ourFileRouter = {
     serverImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
         .middleware(handleAuth)
-        .onUploadComplete(() => {}),
+        .onUploadComplete(async () => {}),
 
     messageFile: f(["image", "pdf"])
         .middleware(handleAuth)
-        .onUploadComplete(() => {}),
+        .onUploadComplete(async () => {}),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

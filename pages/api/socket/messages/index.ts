@@ -1,3 +1,6 @@
+import { auth } from "@/auth";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import currentProfile from "@/lib/current-profile";
 import currentProfilePages from "@/lib/current-profile-pages";
 import prisma from "@/prisma/db";
 import { NextApiResponseServerIo } from "@/types";
@@ -8,11 +11,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
         return res.status(405).json({ error: "Method Not Allowed" });
 
     try {
-        const profile = await currentProfilePages(req);
         const { content, fileUrl } = req.body;
-        const { serverId, channelId } = req.query;
+        const { serverId, channelId, profileId } = req.query;
 
-        if (!profile) return res.status(401).json({ error: "Unauthorized" });
+        if (!profileId) return res.status(401).json({ error: "Unauthorized" });
         if (!content) return res.status(401).json({ error: "content missing" });
         if (!serverId)
             return res.status(401).json({ error: "serverId missing" });
@@ -24,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
                 id: serverId as string,
                 members: {
                     some: {
-                        profileId: profile.id,
+                        profileId: profileId as string,
                     },
                 },
             },
@@ -46,7 +48,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
             return res.status(404).json({ error: "Channel not found" });
 
         const member = server.members.find(
-            member => member.profileId === profile.id
+            member => member.profileId === profileId
         );
 
         if (!member) return res.status(404).json({ error: "Member not found" });

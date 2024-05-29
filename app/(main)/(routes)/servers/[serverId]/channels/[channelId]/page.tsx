@@ -2,12 +2,11 @@ import MediaRoom from "@/components/Media-Room";
 import ChatHeader from "@/components/chat/Chat-Header";
 import ChatInput from "@/components/chat/Chat-Input";
 import ChatMessages from "@/components/chat/Chat-Messages";
-import MobileToggle from "@/components/mobile-toggle";
 
 import currentProfile from "@/lib/current-profile";
 import prisma from "@/prisma/db";
+import { LOGIN_URL } from "@/routes";
 
-import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 interface Props {
@@ -19,7 +18,7 @@ interface Props {
 
 const ChannelPage = async ({ params: { channelId, serverId } }: Props) => {
     const profile = await currentProfile();
-    if (!profile) redirectToSignIn();
+    if (!profile) redirect(LOGIN_URL);
 
     const channel = await prisma.channel.findUnique({
         where: {
@@ -51,7 +50,11 @@ const ChannelPage = async ({ params: { channelId, serverId } }: Props) => {
                         member={member}
                         apiUrl="/api/messages"
                         socketUrl="/api/socket/messages"
-                        socketQuery={{ channelId, serverId }}
+                        socketQuery={{
+                            channelId,
+                            serverId,
+                            profileId: profile.id,
+                        }}
                         paramKey="channelId"
                         paramValue={channelId}
                         chatId={channelId}
@@ -60,7 +63,7 @@ const ChannelPage = async ({ params: { channelId, serverId } }: Props) => {
                         apiUrl="/api/socket/messages"
                         type="channel"
                         name={channel.name}
-                        query={{ channelId, serverId }}
+                        query={{ channelId, serverId, profileId: profile.id }}
                     />
                 </>
             )}

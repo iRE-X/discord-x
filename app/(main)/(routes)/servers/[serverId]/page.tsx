@@ -1,7 +1,7 @@
 import currentProfile from "@/lib/current-profile";
-import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import prisma from "@/prisma/db";
+import { LOGIN_URL } from "@/routes";
 
 interface Props {
     params: {
@@ -11,7 +11,7 @@ interface Props {
 
 const ServerPage = async ({ params: { serverId } }: Props) => {
     const profile = await currentProfile();
-    if (!profile) redirectToSignIn();
+    if (!profile) redirect(LOGIN_URL);
 
     const server = await prisma.server.findUnique({
         where: {

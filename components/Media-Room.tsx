@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import {
     LiveKitRoom,
     VideoConference,
@@ -17,13 +17,12 @@ interface Props {
 }
 
 const MediaRoom = ({ chatId, audio, video }: Props) => {
-    const { user } = useUser();
+    const user = useCurrentUser();
     const [token, setToken] = useState("");
 
     useEffect(() => {
-        if (!user?.firstName) return;
-
-        const name = `${user?.firstName} ${user?.lastName}`;
+        const name = user?.name;
+        if (!name) return;
 
         (async () => {
             try {
@@ -38,7 +37,7 @@ const MediaRoom = ({ chatId, audio, video }: Props) => {
                 console.log("MEDIA-ROOM ERROR: ", error);
             }
         })();
-    }, [user?.firstName, user?.lastName, chatId]);
+    }, [user?.name, chatId]);
 
     if (token === "")
         return (

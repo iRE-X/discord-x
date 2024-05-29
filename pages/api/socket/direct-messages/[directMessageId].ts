@@ -8,12 +8,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
         return res.status(405).json({ error: "Method Not Allowed" });
 
     try {
-        const profile = await currentProfilePages(req);
-        if (!profile) return res.status(401).json({ error: "Unauthorized" });
-
-        const { conversationId, directMessageId } = req.query;
+        const { conversationId, directMessageId, profileId } = req.query;
         const { content } = req.body;
 
+        if (!profileId) return res.status(401).json({ error: "Unauthorized" });
         if (!conversationId)
             return res
                 .status(400)
@@ -51,7 +49,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponseServerIo) => {
             return res.status(404).json({ error: "Message not found" });
 
         const member =
-            conversation.memberOne.profileId === profile.id
+            conversation.memberOne.profileId === profileId
                 ? conversation.memberOne
                 : conversation.memberTwo;
 
