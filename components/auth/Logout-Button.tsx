@@ -9,12 +9,7 @@ interface Props {
 const LogoutButton = ({ children }: Props) => {
   return (
     <span
-      onClick={() =>
-        signOut({
-          callbackUrl: "https://discordx.up.railway.app/",
-          redirect: true,
-        })
-      }
+      onClick={() => signOut()}
       className="cursor-pointer flex items-center justify-center p-2"
     >
       {children}
